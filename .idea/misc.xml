@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/ic_dot_18dp.xml" value="0.1125" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/ic_star_yellow_24dp.xml" value="0.1125" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/outline_close_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/outline_search_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/round_arrow_back_24.xml" value="0.1125" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/font/fonts.xml" value="0.234375" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/font/roboto_h4.xml" value="0.234375" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/fragment_git_list_repo.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/fragment_git_search_repo.xml" value="0.19270833333333334" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/header_with_search.xml" value="0.1" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/img_with_text_item.xml" value="0.5" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/repo_item.xml" value="0.5364238410596026" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

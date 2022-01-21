@@ -1,0 +1,35 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.ZohoGitApp" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="q">true</item>
+
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="app_header_txt_style" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/font_black</item>
+        <item name="android:textSize">@dimen/header_txt_size</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="ownerTxtStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/font_gray</item>
+        <item name="android:textSize">@dimen/owner_txt_size</item>
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+        <style name="nameTxtStyle" parent="Widget.AppCompat.TextView">
+            <item name="android:textColor">@color/font_black</item>
+            <item name="android:textSize">@dimen/name_txt_size</item>
+            <item name="fontFamily">@font/roboto_medium</item>
+
+    </style>
+</resources>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:paddingHorizontal="@dimen/repo_item_h_padding"
+    android:paddingVertical="@dimen/repo_item_v_padding">
+    <ImageView
+        android:id="@+id/avatar_url"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_launcher_background"
+        android:contentDescription="owner_avatar" />
+
+    <TextView
+        android:id="@+id/owner_name"
+        style="@style/ownerTxtStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/owner_left_txt_margin"
+        android:text="square"
+        app:layout_constraintBottom_toBottomOf="@id/avatar_url"
+        app:layout_constraintStart_toEndOf="@id/avatar_url"
+        app:layout_constraintTop_toTopOf="@id/avatar_url" />
+
+    <TextView
+        android:id="@+id/repo_name"
+        android:layout_marginVertical="@dimen/repo_txt_vert_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="workflow-kotlin-compose"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/owner_name"
+        style="@style/nameTxtStyle"/>
+
+    <TextView
+        android:id="@+id/desc_txt"
+        android:layout_marginVertical="@dimen/repo_txt_vert_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="djshsjld sdfhsdhf sdjfhsjdhf sdjfhs sdjfh"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repo_name"
+        style="@style/ownerTxtStyle"/>
+    <include
+        android:layout_marginVertical="@dimen/container_vertical_margin"
+        android:id="@+id/language_container"
+        layout="@layout/img_with_text_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/desc_txt" />
+    <include
+        android:layout_marginVertical="@dimen/container_vertical_margin"
+        android:id="@+id/stars_container"
+        layout="@layout/img_with_text_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/desc_txt" />
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

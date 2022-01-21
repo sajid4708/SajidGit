@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<dimen name="header_txt_size">20sp</dimen>
+    <dimen name="owner_txt_size">16sp</dimen>
+    <dimen name="name_txt_size">18sp</dimen>
+    <dimen name="header_padding">10dp</dimen>
+    <dimen name="padding_icon">8dp</dimen>
+    <dimen name="repo_item_h_padding">12dp</dimen>
+    <dimen name="repo_item_v_padding">16dp</dimen>
+    <dimen name="repo_txt_vert_margin">4dp</dimen>
+    <dimen name="container_vertical_margin">12dp</dimen>
+    <dimen name="owner_left_txt_margin">12dp</dimen>
+</resources>
