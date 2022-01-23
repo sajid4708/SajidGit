@@ -5,56 +5,82 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.sajid.zohogitapp.R
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.sajid.zohogitapp.databinding.FragmentGitListRepoBinding
+import com.sajid.zohogitapp.feature.gitrepos.viewmodel.GitRepoListViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import com.sajid.zohogitapp.common.utils.RecyclerEndScrollListner
+import com.sajid.zohogitapp.datasources.remote.ApiState
+import com.sajid.zohogitapp.feature.gitrepos.GitReposConfig.INITIAL_PAGE_NUMBER
+import com.sajid.zohogitapp.feature.gitrepos.GitReposConfig.PAGE_SIZE
+import kotlinx.coroutines.flow.collect
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [GitListRepoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class GitListRepoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+
+
+@AndroidEntryPoint
+class GitListRepoFragment @Inject constructor() : Fragment(){
+    private val gitRepoListViewModel: GitRepoListViewModel by viewModels()
+    private lateinit var binding: FragmentGitListRepoBinding
+    private var pageNo= INITIAL_PAGE_NUMBER
+    private var canLoadNew=true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_git_list_repo, container, false)
+        binding = FragmentGitListRepoBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.gitRepoListViewModel = gitRepoListViewModel
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GitListRepoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GitListRepoFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        lifecycleScope.launchWhenStarted {
+            gitRepoListViewModel._gitRepoListFlow.collect {
+                when (it) {
+                    is ApiState.Success<*> -> {
+                        canLoadNew=true
+                    }
+                    is ApiState.Loading -> {
+                        canLoadNew=false
+
+                    }
+                    is ApiState.Failure -> {
+                        canLoadNew=true
+
+
+                    }
                 }
             }
+        }
+         gitRepoListViewModel.getRepoListData(pageNo, PAGE_SIZE)
+                addSwipeListeners()
+                addRecyclerViewScrollListner()
+
+    }
+
+    private fun addSwipeListeners() {
+        binding.swipeRefresher.setOnRefreshListener {
+            pageNo=1
+            gitRepoListViewModel.getRepoListData(pageNo, PAGE_SIZE)
+        }
+    }
+
+    private fun addRecyclerViewScrollListner() {
+        binding.gitListRecyler.addOnScrollListener(object : RecyclerEndScrollListner() {
+            override var canLoad: Boolean=canLoadNew
+            override fun loadMoreData() {
+                    pageNo++
+                    gitRepoListViewModel.addRepoListData(pageNo, PAGE_SIZE)
+            }
+        })
     }
 }
+
+

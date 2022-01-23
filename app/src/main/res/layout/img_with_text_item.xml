@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="imgSrc" type="android.graphics.drawable.Drawable"/>
+        <variable
+            name="textToShow"
+            type="String" />
+    </data>
 <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/stargazer_container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -14,7 +21,10 @@
         app:layout_constraintBottom_toBottomOf="@id/icon_txt"
         android:layout_width="14dp"
         android:layout_height="14dp"
-        android:layout_marginRight="@dimen/padding_icon"/>
+        android:layout_marginRight="@dimen/padding_icon"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:src="@{imgSrc}"/>
 
     <TextView
         android:id="@+id/icon_txt"
@@ -24,5 +34,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@{textToShow}"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

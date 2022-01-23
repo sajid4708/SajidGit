@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/git_search_nav"
+    app:startDestination="@id/gitListRepoFragment">
+
+    <fragment
+        android:id="@+id/gitListRepoFragment"
+        android:name="com.sajid.zohogitapp.feature.gitrepos.view.GitListRepoFragment"
+        android:label="fragment_git_list_repo"
+        tools:layout="@layout/fragment_git_list_repo" >
+        <action
+            android:id="@+id/action_gitListRepoFragment_to_gitSearchRepoFragment"
+            app:destination="@id/gitSearchRepoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gitSearchRepoFragment"
+        android:name="com.sajid.zohogitapp.feature.gitrepos.view.GitSearchRepoFragment"
+        android:label="fragment_git_search_repo"
+        tools:layout="@layout/fragment_git_search_repo" />
+</navigation>

@@ -1,34 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent"
+<layout>
+    <data>
+        <variable
+            name="gitViewModel"
+            type="com.sajid.zohogitapp.feature.gitrepos.viewmodel.GitViewModel" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/header_padding"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingHorizontal="@dimen/header_padding">
 
     <ImageView
         android:padding="@dimen/padding_icon"
         android:id="@+id/back_button"
-        android:layout_alignParentStart="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/round_arrow_back_24"
-        android:layout_centerVertical="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:focusable="true" />
-    <EditText
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/search_box"
+        android:onClick="@{()->gitViewModel.onBackClicked()}"
+
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_box"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-android:layout_toStartOf="@id/back_button"
-        android:layout_toEndOf="@id/close_button"/>
-    <ImageView
-        android:padding="@dimen/padding_icon"
-        android:id="@+id/close_button"
-        android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/outline_close_24"
-        android:layout_centerVertical="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:focusable="true" />
-</RelativeLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:endIconMode="clear_text"
+        app:endIconDrawable="@drawable/outline_close_24"
+        app:boxStrokeColor="@color/font_gray"
+
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_box_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:afterTextChanged="@{(text)->gitViewModel.onTextChange(text)}"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

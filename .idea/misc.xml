@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable-xxxhdpi/line_seperator.xml" value="0.12447916666666667" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/edit_txt_bg.xml" value="0.1125" />
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/ic_dot_18dp.xml" value="0.1125" />
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/ic_star_yellow_24dp.xml" value="0.1125" />
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/outline_close_24.xml" value="0.2203125" />
@@ -10,12 +12,16 @@
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/drawable/round_arrow_back_24.xml" value="0.1125" />
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/font/fonts.xml" value="0.234375" />
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/font/roboto_h4.xml" value="0.234375" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/activity_git.xml" value="0.1" />
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/fragment_git_list_repo.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/fragment_git_search_repo.xml" value="0.19270833333333334" />
-        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/header_with_search.xml" value="0.1" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/header.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/header_with_search.xml" value="0.18" />
         <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/img_with_text_item.xml" value="0.5" />
-        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/repo_item.xml" value="0.5364238410596026" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/no_network_view.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/repo_item.xml" value="0.5250431778929189" />
+        <entry key="..\:/Users/sajid/AndroidStudioProjects/ZohoGitApp/app/src/main/res/layout/repo_item_2.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

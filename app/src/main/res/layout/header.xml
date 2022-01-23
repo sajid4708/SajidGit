@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="onSearchClickEvent"
+            type="com.sajid.zohogitapp.common.utils.OnSearchClickEvent" />
+    </data>
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="@dimen/header_padding"
@@ -22,5 +28,7 @@
         android:layout_centerVertical="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:focusable="true" />
+        android:focusable="true"
+        android:onClick="@{()->onSearchClickEvent.onSearchClicked()}"/>
 </RelativeLayout>
+</layout>
