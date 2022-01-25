@@ -13,15 +13,21 @@
     android:layout_height="match_parent"
     tools:context=".feature.gitrepos.view.GitListRepoFragment"
     >
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresher"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/circular_progress"
+        app:layout_constraintBottom_toTopOf="@id/circular_progress">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
         app:isRefreshing="@{gitRepoListViewModel.swipeLoaderState}"
+        android:visibility="@{!gitRepoListViewModel.isErrorState  ?View.VISIBLE:View.GONE,default=gone}"
 >
         <!--   app:gitRepoListAdapter="@{gitRepoList}"-->
     <androidx.recyclerview.widget.RecyclerView
@@ -36,6 +42,13 @@
         android:overScrollMode="always"
         />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="@{gitRepoListViewModel.initialLoader?View.VISIBLE:View.GONE,default=gone}"
+            />
+    </FrameLayout>
     <ProgressBar
         android:id="@+id/circular_progress"
         android:layout_width="wrap_content"
@@ -43,14 +56,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="@{gitRepoListViewModel.loaderState?View.VISIBLE:View.GONE,default=gone}"/>
+        android:visibility="@{gitRepoListViewModel.loaderState ?View.VISIBLE:View.GONE,default=gone}"/>
 
     <include
         android:id="@+id/error_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         layout="@layout/no_network_view"
-         android:visibility="gone"
+        android:visibility="@{gitRepoListViewModel.isErrorState?View.VISIBLE:View.GONE,default=gone}"
+        app:onRetryClick="@{gitRepoListViewModel}"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

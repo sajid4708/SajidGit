@@ -1,12 +1,12 @@
 package com.sajid.zohogitapp.feature.gitrepos.viewmodel
 
-import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sajid.zohogitapp.common.utils.DataFetchState
 import com.sajid.zohogitapp.common.utils.DataSourceState
+import com.sajid.zohogitapp.common.utils.OnNetworkRetryEvent
 import com.sajid.zohogitapp.datasources.DataSourceRepository
 import com.sajid.zohogitapp.datasources.model.GitRepo
 import com.sajid.zohogitapp.datasources.remote.ApiState
@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceRepository: DataSourceRepository) :
-    ViewModel() {
+    ViewModel(){
     private val _loadersState: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
     }
@@ -41,7 +41,6 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
     val _gitRepoListFlow: StateFlow<ApiState> = gitRepoListFlow
 
     private var pageNo = GitReposConfig.INITIAL_PAGE_NUMBER
-
 
     fun loadSearchData(
         dataFetchState: DataFetchState,
@@ -76,55 +75,57 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
         if (!searchQuery.isNullOrEmpty()) {
             gitRepoListFlow.value = ApiState.Loading
             _loadersState.value = true
-if(dataSourceState == DataSourceState.ONLINE_MODE){
-    gitDataSourceRepository.getRepoSearchedListFromRemote(
-        pageNo,
-        GitReposConfig.PAGE_SIZE,
-        searchQuery
-    )
-        .catch { e ->
-            gitRepoListFlow.value = ApiState.Failure(e)
-            _loadersState.value = false
-        }
-        .collect { data ->
-            gitRepoListFlow.value = ApiState.Success(data)
-            _loadersState.value = false
-            if (isAddData) {
-                _gitRepoSearchList.value = _gitRepoSearchList.value.apply {
-                    if (this != null) {
-                        items.addAll(data.items)
+            if (dataSourceState == DataSourceState.ONLINE_MODE) {
+                gitDataSourceRepository.getRepoSearchedListFromRemote(
+                    pageNo,
+                    GitReposConfig.PAGE_SIZE,
+                    searchQuery
+                )
+                    .catch { e ->
+                        gitRepoListFlow.value = ApiState.Failure(e)
+                        _loadersState.value = false
                     }
-                }
-            } else {
-                _gitRepoSearchList.value = data
-            }
-        }
-}
-            else{
-    gitDataSourceRepository.getRepoSearchedListFromLocal(
-        pageNo,
-        GitReposConfig.PAGE_SIZE,
-        searchQuery
-    )
-        .catch { e ->
-            gitRepoListFlow.value = ApiState.Failure(e)
-            _loadersState.value = false
-        }
-        .collect { data ->
-            gitRepoListFlow.value = ApiState.Success(data)
-            _loadersState.value = false
-            if (isAddData) {
-                _gitRepoSearchList.value = _gitRepoSearchList.value.apply {
-                    if (this != null) {
-                        items.addAll(data.items)
+                    .collect { data ->
+                        gitRepoListFlow.value = ApiState.Success(data)
+                        _loadersState.value = false
+                        if (isAddData) {
+                            _gitRepoSearchList.value = _gitRepoSearchList.value.apply {
+                                if (this != null) {
+                                    items.addAll(data.items)
+                                }
+                            }
+                        } else {
+                            _gitRepoSearchList.value = data
+                        }
                     }
-                }
             } else {
-                _gitRepoSearchList.value = data
+                gitDataSourceRepository.getRepoSearchedListFromLocal(
+                    pageNo,
+                    GitReposConfig.PAGE_SIZE,
+                    searchQuery
+                )
+                    .catch { e ->
+                        gitRepoListFlow.value = ApiState.Failure(e)
+                        _loadersState.value = false
+                    }
+                    .collect { data ->
+                        gitRepoListFlow.value = ApiState.Success(data)
+                        _loadersState.value = false
+                        if (isAddData) {
+                            _gitRepoSearchList.value = _gitRepoSearchList.value.apply {
+                                if (this != null) {
+                                    items.addAll(data.items)
+                                }
+                            }
+                        } else {
+                            _gitRepoSearchList.value = data
+                        }
+                    }
             }
-        }
-}
 
+        }
+        else{
+            _gitRepoSearchList.value=null
         }
     }
 

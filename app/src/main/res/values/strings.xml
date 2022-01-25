@@ -7,4 +7,5 @@
     <string name="error_occured">Error Occured in GithubApi</string>
     <string name="no_network_info">You are Not connected to Internet we show offline data now</string>
     <string name="yes_network_info">You are Not connected to Internet we show Remote data now</string>
+    <string name="try_again">TRY AGAIN</string>
 </resources>

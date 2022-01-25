@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="@{gitViewModel.searchState?View.GONE:View.VISIBLE,default=visible}"
                 app:onSearchClickEvent="@{gitViewModel}"
-                app:canShowSearch="@{gitViewModel.isInternetConnected!=DataSourceState.NO_NETWORK_MODE}"
+                app:canShowSearch="@{gitViewModel.canShowSearch.booleanValue()}"
                 />
             <include
                 android:id="@+id/header_with_search"

@@ -14,11 +14,8 @@ interface GitLocalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGitItem(gitItems: GitItems)
 
-    @Query("DELETE FROM git_items")
-   suspend fun deleteAllLocalItems()
-
-    @Delete
-   suspend fun deleteGitItem(gitItems: GitItems)
+    @Query("SELECT EXISTS (SELECT 1 FROM git_items)")
+    suspend fun checkIfDataExist():Int
 
     suspend fun insertAll(list: MutableList<GitItems>){
         for(item in list){

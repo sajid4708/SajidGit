@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable
+            name="onRetryClick"
+            type="com.sajid.zohogitapp.common.utils.OnNetworkRetryEvent" />
+    </data>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,13 +28,14 @@
         android:id="@+id/retry_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TRY AGAIN"
+        android:text="@string/try_again"
         android:background="@color/white"
         android:textAllCaps="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        android:onClick="@{()->onRetryClick.onNetworkRetryClicked()}"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

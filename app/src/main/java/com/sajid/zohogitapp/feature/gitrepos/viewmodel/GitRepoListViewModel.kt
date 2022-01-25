@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.sajid.zohogitapp.common.utils.DataFetchState
 import com.sajid.zohogitapp.common.utils.DataSourceState
+import com.sajid.zohogitapp.common.utils.OnNetworkRetryEvent
 import com.sajid.zohogitapp.datasources.DataSourceRepository
 import com.sajid.zohogitapp.datasources.model.GitRepo
 import com.sajid.zohogitapp.datasources.remote.ApiState
@@ -20,8 +21,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GitRepoListViewModel @Inject constructor(private val gitDataSourceRepository: DataSourceRepository,private val workManager: WorkManager) : ViewModel() {
+class GitRepoListViewModel @Inject constructor(private val gitDataSourceRepository: DataSourceRepository) : ViewModel(),OnNetworkRetryEvent {
 
+    private val _isErrorState:MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+    val isErrorState:LiveData<Boolean>
+    get() = _isErrorState
     private val _loadersState:MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
@@ -48,11 +54,20 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
 
     private var _pageNo=GitReposConfig.INITIAL_PAGE_NUMBER
 
+    private val _initialLoader:MutableLiveData<Boolean> by lazy{
+        MutableLiveData<Boolean>()
+    }
+
+    val initialLoader:LiveData<Boolean>
+    get() = _initialLoader
+
+
 
     fun loadGitRepoListData(dataFetchState: DataFetchState,dataSourceState: DataSourceState){
         when(dataFetchState){
           DataFetchState.FETCH_FIRST_DATA->{
               if( _gitRepoList.value?.items.isNullOrEmpty()){
+                  _initialLoader.value=true
                   _pageNo=1
                   getRepoListData(_pageNo,GitReposConfig.PAGE_SIZE,dataSourceState)
 
@@ -78,11 +93,15 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
                 .catch { e ->
                     gitRepoListFlow.value = ApiState.Failure(e)
                     _swipeLoadersState.value = false
+                    _initialLoader.value=false
                 }
                 .collect { data ->
                     gitRepoListFlow.value = ApiState.Success(data)
                     _gitRepoList.value = data
                     _swipeLoadersState.value = false
+                    _initialLoader.value=false
+                    _isErrorState.value=false
+
                 }
         }
         else{
@@ -90,11 +109,13 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
                 .catch { e ->
                     gitRepoListFlow.value = ApiState.Failure(e)
                     _swipeLoadersState.value = false
+                    _initialLoader.value=false
                 }
                 .collect { data ->
                     gitRepoListFlow.value = ApiState.Success(data)
                     _gitRepoList.value = data
                     _swipeLoadersState.value = false
+                    _initialLoader.value=false
                 }
 
     }
@@ -140,5 +161,16 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
                 }
         }
 
+    }
+
+suspend fun setErrorState(isError:Boolean){
+    gitDataSourceRepository.checkIfOfflineDataAvailable()
+        .collect { data ->
+            _isErrorState.value=isError && !data
+
+        }
+}
+    override fun onNetworkRetryClicked() {
+        getRepoListData(GitReposConfig.INITIAL_PAGE_NUMBER,GitReposConfig.PAGE_SIZE,DataSourceState.ONLINE_MODE)
     }
 }

@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.collect
 
 
 @AndroidEntryPoint
-class GitListRepoFragment @Inject constructor() : Fragment() {
+class GitListRepoFragment: Fragment() {
     private val gitViewModel: GitViewModel by activityViewModels()
     private val gitRepoListViewModel: GitRepoListViewModel by viewModels()
     private lateinit var binding: FragmentGitListRepoBinding
@@ -50,6 +50,11 @@ class GitListRepoFragment @Inject constructor() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         gitViewModel.isInternetConnected.observe(viewLifecycleOwner, {
+            if(it==DataSourceState.OFFLINE_MODE){
+                lifecycleScope.launchWhenCreated {
+                    gitRepoListViewModel.setErrorState(true)
+                }
+            }
             dataSourceState = it
         })
         lifecycleScope.launchWhenStarted {
@@ -57,6 +62,7 @@ class GitListRepoFragment @Inject constructor() : Fragment() {
                 when (it) {
                     is ApiState.Success<*> -> {
                         canLoadNew = true
+                        gitViewModel.checkIfOfflineDataExist()
                     }
                     is ApiState.Loading -> {
                         canLoadNew = false
@@ -67,7 +73,7 @@ class GitListRepoFragment @Inject constructor() : Fragment() {
                         Toast.makeText(
                             requireContext(),
                             it.msg.localizedMessage,
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_LONG
                         ).show()
 
                     }

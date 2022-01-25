@@ -28,18 +28,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [GitSearchRepoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 @AndroidEntryPoint
-class GitSearchRepoFragment @Inject constructor() : Fragment() {
+class GitSearchRepoFragment : Fragment() {
 
     private val gitViewModel: GitViewModel by activityViewModels()
     private val gitRepoSearchViewModel: GitRepoSearchViewModel by viewModels()
@@ -64,9 +55,6 @@ class GitSearchRepoFragment @Inject constructor() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        gitViewModel.isInternetConnected.observe(viewLifecycleOwner,{
-            dataSourceState=it
-        })
         lifecycleScope.launchWhenStarted {
             gitRepoSearchViewModel._gitRepoListFlow.collect {
                 when (it) {
@@ -82,7 +70,7 @@ class GitSearchRepoFragment @Inject constructor() : Fragment() {
                         Toast.makeText(
                             requireContext(),
                             it.msg.localizedMessage,
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_LONG
                         ).show()
 
 
@@ -90,7 +78,7 @@ class GitSearchRepoFragment @Inject constructor() : Fragment() {
                 }
             }
         }
-        gitViewModel.searchQuery.observe(viewLifecycleOwner, {
+        gitViewModel._searchQuery.observe(viewLifecycleOwner, {
             gitRepoSearchViewModel.loadSearchData(DataFetchState.FETCH_FIRST_DATA, it,dataSourceState)
         })
         addRecyclerViewScrollListner()
@@ -104,17 +92,12 @@ class GitSearchRepoFragment @Inject constructor() : Fragment() {
             override fun loadMoreData() {
                 gitRepoSearchViewModel.loadSearchData(
                     DataFetchState.ADD_DATA,
-                    gitViewModel.searchQuery.value,
+                    gitViewModel._searchQuery.value,
                     dataSourceState
                 )
 
             }
         })
-    }
-
-    override fun onDestroyView() {
-        gitViewModel.searchQuery.removeObservers(viewLifecycleOwner)
-        super.onDestroyView()
     }
 
 }
