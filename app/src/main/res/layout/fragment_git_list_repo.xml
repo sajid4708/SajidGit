@@ -33,9 +33,9 @@
         android:orientation="vertical"
         app:gitRepoListAdapter="@{gitRepoListViewModel.gitRepoList}"
         android:nestedScrollingEnabled="false"
+        android:overScrollMode="always"
         />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
     <ProgressBar
         android:id="@+id/circular_progress"
         android:layout_width="wrap_content"
@@ -45,7 +45,9 @@
         app:layout_constraintStart_toStartOf="parent"
         android:visibility="@{gitRepoListViewModel.loaderState?View.VISIBLE:View.GONE,default=gone}"/>
 
-    <include android:layout_width="match_parent"
+    <include
+        android:id="@+id/error_screen"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         layout="@layout/no_network_view"
          android:visibility="gone"

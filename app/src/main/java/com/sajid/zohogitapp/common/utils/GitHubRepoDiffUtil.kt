@@ -1,9 +1,9 @@
 package com.sajid.zohogitapp.common.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.sajid.zohogitapp.datasources.model.Items
+import com.sajid.zohogitapp.datasources.model.GitItems
 
-class GitHubRepoDiffUtil(private val oldList:List<Items>, private val newList:List<Items>) : DiffUtil.Callback () {
+class GitHubRepoDiffUtil(private val oldList:List<GitItems>, private val newList:List<GitItems>) : DiffUtil.Callback () {
 
 
     override fun getOldListSize(): Int {

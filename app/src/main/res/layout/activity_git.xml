@@ -2,6 +2,7 @@
 <layout>
     <data>
         <import type="android.view.View"/>
+        <import type="com.sajid.zohogitapp.common.utils.DataSourceState"/>
        <variable
            name="gitViewModel"
            type="com.sajid.zohogitapp.feature.gitrepos.viewmodel.GitViewModel" />
@@ -33,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="@{gitViewModel.searchState?View.GONE:View.VISIBLE,default=visible}"
                 app:onSearchClickEvent="@{gitViewModel}"
+                app:canShowSearch="@{gitViewModel.isInternetConnected!=DataSourceState.NO_NETWORK_MODE}"
                 />
             <include
                 android:id="@+id/header_with_search"

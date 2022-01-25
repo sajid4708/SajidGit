@@ -9,15 +9,12 @@ import com.sajid.zohogitapp.BR
 import com.sajid.zohogitapp.R
 import com.sajid.zohogitapp.common.utils.GitHubRepoDiffUtil
 import com.sajid.zohogitapp.databinding.RepoItemTwoBinding
-import com.sajid.zohogitapp.datasources.model.GitRepo
-import com.sajid.zohogitapp.datasources.model.Items
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import com.sajid.zohogitapp.datasources.model.GitItems
 
 
 class GitRepoListAdapter : RecyclerView.Adapter<GitRepoViewHolder>() {
-    private var settedList= mutableSetOf<Items>()
-    private var gitRepoList = mutableListOf<Items>()
+    private var settedList= mutableSetOf<GitItems>()
+    private var gitRepoList = mutableListOf<GitItems>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GitRepoViewHolder {
         val binding = DataBindingUtil.inflate<RepoItemTwoBinding>(
             LayoutInflater.from(parent.context),
@@ -45,7 +42,7 @@ class GitRepoListAdapter : RecyclerView.Adapter<GitRepoViewHolder>() {
     }
 
 
-    fun setData(newList: List<Items>) {
+    fun setData(newList: List<GitItems>) {
         val diffcallBack=GitHubRepoDiffUtil(gitRepoList, newList)
         val diffResult = DiffUtil.calculateDiff(diffcallBack)
         gitRepoList.clear()
@@ -61,7 +58,7 @@ class GitRepoListAdapter : RecyclerView.Adapter<GitRepoViewHolder>() {
 class GitRepoViewHolder(private val binding: RepoItemTwoBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Items) {
+    fun bind(item: GitItems) {
         binding.setVariable(BR.gitRepoItem, item)
         binding.setVariable(BR.langImgSrc,binding.root.context.getDrawable(R.drawable.ic_dot_18dp))
         binding.setVariable(BR.starImgSrc,binding.root.context.getDrawable(R.drawable.ic_star_yellow_24dp))

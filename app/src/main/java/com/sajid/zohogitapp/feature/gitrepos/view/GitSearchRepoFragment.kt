@@ -11,6 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.sajid.zohogitapp.R
 import com.sajid.zohogitapp.common.BaseActivity
+import com.sajid.zohogitapp.common.utils.DataFetchState
+import com.sajid.zohogitapp.common.utils.DataSourceState
+import com.sajid.zohogitapp.common.utils.NetworkUtils
 import com.sajid.zohogitapp.common.utils.RecyclerEndScrollListner
 import com.sajid.zohogitapp.databinding.FragmentGitListRepoBinding
 import com.sajid.zohogitapp.databinding.FragmentGitSearchRepoBinding
@@ -41,36 +44,46 @@ class GitSearchRepoFragment @Inject constructor() : Fragment() {
     private val gitViewModel: GitViewModel by activityViewModels()
     private val gitRepoSearchViewModel: GitRepoSearchViewModel by viewModels()
     private lateinit var binding: FragmentGitSearchRepoBinding
-    private var pageNo= INITIAL_PAGE_NUMBER
-    private var canLoadNew=true
+    private var canLoadNew = true
+    private lateinit var dataSourceState: DataSourceState
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentGitSearchRepoBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.gitRepoSearchViewModel = gitRepoSearchViewModel
+        dataSourceState = if (NetworkUtils.isNetworkAvailable(requireContext()))
+            DataSourceState.ONLINE_MODE
+        else DataSourceState.OFFLINE_MODE
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        gitViewModel.isInternetConnected.observe(viewLifecycleOwner,{
+            dataSourceState=it
+        })
         lifecycleScope.launchWhenStarted {
             gitRepoSearchViewModel._gitRepoListFlow.collect {
                 when (it) {
                     is ApiState.Success<*> -> {
-                        canLoadNew=true
+                        canLoadNew = true
                     }
                     is ApiState.Loading -> {
-                        canLoadNew=false
+                        canLoadNew = false
 
                     }
                     is ApiState.Failure -> {
-                        canLoadNew=true
-                        Toast.makeText(requireContext(),it.msg.localizedMessage,Toast.LENGTH_SHORT).show()
+                        canLoadNew = true
+                        Toast.makeText(
+                            requireContext(),
+                            it.msg.localizedMessage,
+                            Toast.LENGTH_SHORT
+                        ).show()
 
 
                     }
@@ -78,29 +91,29 @@ class GitSearchRepoFragment @Inject constructor() : Fragment() {
             }
         }
         gitViewModel.searchQuery.observe(viewLifecycleOwner, {
-                pageNo=1
-                gitRepoSearchViewModel.getRepoSearchListData(pageNo, PAGE_SIZE,it)
-
-
+            gitRepoSearchViewModel.loadSearchData(DataFetchState.FETCH_FIRST_DATA, it,dataSourceState)
         })
         addRecyclerViewScrollListner()
 
 
-
     }
+
     private fun addRecyclerViewScrollListner() {
         binding.searchRecyler.addOnScrollListener(object : RecyclerEndScrollListner() {
-            override var canLoad: Boolean=canLoadNew
+            override var canLoad: Boolean = canLoadNew
             override fun loadMoreData() {
-                pageNo++
-                gitRepoSearchViewModel.getRepoSearchListData(pageNo, PAGE_SIZE,gitViewModel.searchQuery.value)
+                gitRepoSearchViewModel.loadSearchData(
+                    DataFetchState.ADD_DATA,
+                    gitViewModel.searchQuery.value,
+                    dataSourceState
+                )
 
             }
         })
     }
 
     override fun onDestroyView() {
-        gitViewModel.onBackClicked()
+        gitViewModel.searchQuery.removeObservers(viewLifecycleOwner)
         super.onDestroyView()
     }
 

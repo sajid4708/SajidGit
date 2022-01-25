@@ -3,7 +3,7 @@
     <data>
         <variable
             name="gitRepoItem"
-            type="com.sajid.zohogitapp.datasources.model.Items" />
+            type="com.sajid.zohogitapp.datasources.model.GitItems" />
         <variable name="langImgSrc" type="android.graphics.drawable.Drawable"/>
         <variable name="starImgSrc" type="android.graphics.drawable.Drawable"/>
     </data>

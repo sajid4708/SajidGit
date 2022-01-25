@@ -17,16 +17,20 @@
         android:id="@+id/search_recyler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/circular_progress"
+        app:layout_constraintBottom_toTopOf="@id/circular_progress_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/repo_item"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        app:gitRepoListAdapter="@{gitRepoSearchViewModel.gitRepoSearchList}"/>
+        app:gitRepoListAdapter="@{gitRepoSearchViewModel.gitRepoSearchList}"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="always"
+        />
 
     <include
+        android:id="@+id/error_screen"
         layout="@layout/no_network_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

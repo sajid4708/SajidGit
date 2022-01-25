@@ -4,9 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.*
+import com.sajid.zohogitapp.common.utils.DataFetchState
+import com.sajid.zohogitapp.common.utils.DataSourceState
 import com.sajid.zohogitapp.datasources.DataSourceRepository
 import com.sajid.zohogitapp.datasources.model.GitRepo
 import com.sajid.zohogitapp.datasources.remote.ApiState
+import com.sajid.zohogitapp.feature.gitrepos.GitReposConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +20,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GitRepoListViewModel @Inject constructor(private val gitDataSourceRepository: DataSourceRepository) : ViewModel() {
+class GitRepoListViewModel @Inject constructor(private val gitDataSourceRepository: DataSourceRepository,private val workManager: WorkManager) : ViewModel() {
+
     private val _loadersState:MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
@@ -41,38 +46,99 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
 
     val _gitRepoListFlow :StateFlow<ApiState> = gitRepoListFlow
 
-    fun getRepoListData(pageNo:Int,pageSize:Int)=viewModelScope.launch {
-        gitRepoListFlow.value = ApiState.Loading
-        gitDataSourceRepository.getRepoListFromRemote(pageNo,pageSize)
-            .catch {e->
-                gitRepoListFlow.value = ApiState.Failure(e)
-                _swipeLoadersState.value=false}
-            .collect {data->
-                gitRepoListFlow.value=ApiState.Success(data)
-                _gitRepoList.value=data
-                _swipeLoadersState.value=false}
+    private var _pageNo=GitReposConfig.INITIAL_PAGE_NUMBER
+
+
+    fun loadGitRepoListData(dataFetchState: DataFetchState,dataSourceState: DataSourceState){
+        when(dataFetchState){
+          DataFetchState.FETCH_FIRST_DATA->{
+              if( _gitRepoList.value?.items.isNullOrEmpty()){
+                  _pageNo=1
+                  getRepoListData(_pageNo,GitReposConfig.PAGE_SIZE,dataSourceState)
+
+              }
+          }
+            DataFetchState.REFRESH_DATA->{
+                _pageNo=1
+                getRepoListData(GitReposConfig.INITIAL_PAGE_NUMBER,GitReposConfig.PAGE_SIZE,dataSourceState)
+            }
+            DataFetchState.ADD_DATA->{
+                _pageNo++
+                addRepoListData(_pageNo, GitReposConfig.PAGE_SIZE,dataSourceState)
+            }
+        }
     }
 
-    fun  addRepoListData(pageNo:Int,pageSize:Int)=viewModelScope.launch {
-        gitRepoListFlow.value = ApiState.Loading
-        _loadersState.value=true
-        gitDataSourceRepository.getRepoListFromRemote(pageNo,pageSize)
-            .catch {e->
-                gitRepoListFlow.value = ApiState.Failure(e)
-                _loadersState.value=false
-            }
-            .collect {data->
 
-                _loadersState.value=false
-                gitRepoListFlow.value=ApiState.Success(data)
-                _gitRepoList.value=_gitRepoList.value.apply {
-                  if(this!=null){
-                      items.addAll(data.items)
-                  }
+    private fun getRepoListData(pageNo:Int,pageSize:Int,dataSourceState: DataSourceState)=viewModelScope.launch {
+        _swipeLoadersState.value=true
+        gitRepoListFlow.value = ApiState.Loading
+        if(dataSourceState==DataSourceState.ONLINE_MODE) {
+            gitDataSourceRepository.getRepoListFromRemote(pageNo, pageSize)
+                .catch { e ->
+                    gitRepoListFlow.value = ApiState.Failure(e)
+                    _swipeLoadersState.value = false
+                }
+                .collect { data ->
+                    gitRepoListFlow.value = ApiState.Success(data)
+                    _gitRepoList.value = data
+                    _swipeLoadersState.value = false
+                }
+        }
+        else{
+            gitDataSourceRepository.getRepoListFromLocal(pageNo, pageSize)
+                .catch { e ->
+                    gitRepoListFlow.value = ApiState.Failure(e)
+                    _swipeLoadersState.value = false
+                }
+                .collect { data ->
+                    gitRepoListFlow.value = ApiState.Success(data)
+                    _gitRepoList.value = data
+                    _swipeLoadersState.value = false
                 }
 
-            }
+    }
     }
 
 
+    private fun  addRepoListData(pageNo:Int,pageSize:Int,dataSourceState: DataSourceState)=viewModelScope.launch {
+        gitRepoListFlow.value = ApiState.Loading
+        _loadersState.value=true
+        if(dataSourceState==DataSourceState.ONLINE_MODE){
+            gitDataSourceRepository.getRepoListFromRemote(pageNo,pageSize)
+                .catch {e->
+                    gitRepoListFlow.value = ApiState.Failure(e)
+                    _loadersState.value=false
+                }
+                .collect {data->
+
+                    _loadersState.value=false
+                    gitRepoListFlow.value=ApiState.Success(data)
+                    _gitRepoList.value=_gitRepoList.value.apply {
+                        if(this!=null){
+                            items.addAll(data.items)
+                        }
+                    }
+
+                }
+        }
+        else{
+            gitDataSourceRepository.getRepoListFromLocal(pageNo,pageSize)
+                .catch {e->
+                    gitRepoListFlow.value = ApiState.Failure(e)
+                    _loadersState.value=false
+                }
+                .collect {data->
+                    _loadersState.value=false
+                    gitRepoListFlow.value=ApiState.Success(data)
+                    _gitRepoList.value=_gitRepoList.value.apply {
+                        if(this!=null){
+                            items.addAll(data.items)
+                        }
+                    }
+
+                }
+        }
+
+    }
 }

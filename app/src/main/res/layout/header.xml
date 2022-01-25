@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="android.view.View"/>
         <variable
             name="onSearchClickEvent"
             type="com.sajid.zohogitapp.common.utils.OnSearchClickEvent" />
+        <variable
+            name="canShowSearch"
+            type="Boolean" />
     </data>
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -29,6 +33,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
+        android:visibility="@{canShowSearch?View.VISIBLE:View.GONE,default=visible}"
         android:onClick="@{()->onSearchClickEvent.onSearchClicked()}"/>
 </RelativeLayout>
 </layout>
