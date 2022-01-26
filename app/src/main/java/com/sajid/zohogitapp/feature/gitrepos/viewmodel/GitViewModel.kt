@@ -1,17 +1,12 @@
 package com.sajid.zohogitapp.feature.gitrepos.viewmodel
 
-import android.content.Context
-import android.text.Editable
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sajid.zohogitapp.common.utils.DataSourceState
 import com.sajid.zohogitapp.common.utils.OnSearchClickEvent
 import com.sajid.zohogitapp.datasources.DataSourceRepository
-import com.sajid.zohogitapp.datasources.remote.ApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 

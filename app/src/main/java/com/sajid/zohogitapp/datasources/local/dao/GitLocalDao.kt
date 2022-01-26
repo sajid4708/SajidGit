@@ -1,6 +1,7 @@
 package com.sajid.zohogitapp.datasources.local.dao
 
 import androidx.room.*
+import com.bumptech.glide.Glide
 import com.sajid.zohogitapp.datasources.model.GitItems
 
 
@@ -21,6 +22,7 @@ interface GitLocalDao {
     suspend fun insertAll(list: MutableList<GitItems>){
         for(item in list){
             insertGitItem(item)
+
         }
     }
 }

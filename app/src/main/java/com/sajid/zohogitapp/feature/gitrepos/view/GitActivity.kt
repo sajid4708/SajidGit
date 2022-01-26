@@ -1,24 +1,14 @@
 package com.sajid.zohogitapp.feature.gitrepos.view
 
-import android.app.PendingIntent.getActivity
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.sajid.zohogitapp.R
 import com.sajid.zohogitapp.common.BaseActivity
-import com.sajid.zohogitapp.common.utils.ConnectivityReceiver
 import com.sajid.zohogitapp.common.utils.DataSourceState
 import com.sajid.zohogitapp.common.utils.NetworkUtils
 import com.sajid.zohogitapp.databinding.ActivityGitBinding
-import com.sajid.zohogitapp.datasources.local.GitDatabase
-import com.sajid.zohogitapp.datasources.model.GitItems
-import com.sajid.zohogitapp.datasources.model.Owner
 import com.sajid.zohogitapp.feature.gitrepos.viewmodel.GitViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.sajid.zohogitapp.common.utils.ConnectivityReceiver
+
 /**
 Common functions used in all activities will be present here
  */

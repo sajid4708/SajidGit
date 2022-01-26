@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.*
 import com.sajid.zohogitapp.common.utils.DataFetchState
 import com.sajid.zohogitapp.common.utils.DataSourceState
 import com.sajid.zohogitapp.common.utils.OnNetworkRetryEvent
@@ -134,6 +133,8 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
                 tempList.clear()
                 tempList.addAll(data.items)
                 _gitRepoList.value =data.apply {
+                    //Coverted to Set then list because remote
+                    // and Local data May conflict and have Duplicated
                     items=tempList.toSet().toMutableList()
                 }
                 _swipeLoadersState.value = false
@@ -158,12 +159,12 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
             .collect {data->
                 tempList.addAll(data.items)
                 _gitRepoList.value =data.apply {
+                    //Coverted to Set then list because remote
+                    // and Local data May conflict and have Duplicated
                     items=tempList.toSet().toMutableList()
                 }
                 _loadersState.value=false
                 gitRepoListFlow.value=ApiState.Success(data)
-
-
 
             }
     }

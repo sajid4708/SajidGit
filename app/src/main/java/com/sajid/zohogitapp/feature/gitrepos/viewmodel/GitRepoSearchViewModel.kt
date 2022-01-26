@@ -117,6 +117,8 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
                         if(!data.items.isNullOrEmpty()){
                             tempList.addAll(data.items)
                             _gitRepoSearchList.value =data.apply {
+                                //Coverted to Set then list because remote
+                                // and Local data May conflict and have Duplicated
                                 items=tempList.toSet().toMutableList()
                             }
                         }
@@ -124,6 +126,8 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
                         tempList.clear()
                         tempList.addAll(data.items)
                         _gitRepoSearchList.value =data.apply {
+                            //Coverted to Set then list because remote
+                            // and Local data May conflict and have Duplicated
                             items=tempList.toSet().toMutableList()
                         }
                     }

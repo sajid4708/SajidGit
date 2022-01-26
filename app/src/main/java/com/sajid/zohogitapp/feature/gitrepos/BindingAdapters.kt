@@ -1,22 +1,17 @@
 package com.sajid.zohogitapp.feature.gitrepos
 
 import android.util.Log
-import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.sajid.zohogitapp.R
 import com.sajid.zohogitapp.common.utils.SpaceItemDecoration
 import com.sajid.zohogitapp.datasources.model.GitRepo
 import com.sajid.zohogitapp.feature.gitrepos.view.GitRepoListAdapter
+
 /**
 Generic Recyler Adapter used to populate Items in recyler View
  */

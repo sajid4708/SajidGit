@@ -1,15 +1,12 @@
 package com.sajid.zohogitapp.datasources
 
-import android.util.Log
 import com.sajid.zohogitapp.common.utils.DataSourceState
 import com.sajid.zohogitapp.datasources.local.dao.GitLocalDao
 import com.sajid.zohogitapp.datasources.model.GitRepo
 import com.sajid.zohogitapp.datasources.remote.service.GitServiceImplementation
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DataSourceRepository @Inject constructor(

@@ -21,8 +21,19 @@ Description
 
 7)KotlinFlow fetches data from remote sources and Updates LiveData
 
-List Screen = "Where Git pulic repo's are listed"
-Search Screen ="Where Git Repo's can be searched"
+9) Screens used
+   List Screen Fragment = "Where Git pulic repo's are listed"
+   Search Screen Fragment ="Where Git Repo's can be searched"
+   GitRepoActivity Screen =which holds ListScreen Fragment and Search Screen Fragment
+   
+8) Activity View Model is shared to Both the Fragment Screen
+
+9)Each Fragment has a seperate view Model to populate Ui
+
+10)Ui Data Survives in ViewModel even after Configuration changes
+  
+11) Showed Some Api Error and Db Fetch Errors as Toast  
+
 
 App Usescases:
 

@@ -1,71 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="gitRepoListViewModel"
             type="com.sajid.zohogitapp.feature.gitrepos.viewmodel.GitRepoListViewModel" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".feature.gitrepos.view.GitListRepoFragment"
-    >
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/circular_progress">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresher"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:context=".feature.gitrepos.view.GitListRepoFragment">
 
-        app:isRefreshing="@{gitRepoListViewModel.swipeLoaderState}"
-        android:visibility="@{!gitRepoListViewModel.isErrorState  ?View.VISIBLE:View.GONE,default=gone}"
->
-        <!--   app:gitRepoListAdapter="@{gitRepoList}"-->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/git_list_recyler"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        app:gitRepoListAdapter="@{gitRepoListViewModel.gitRepoList}"
-        android:nestedScrollingEnabled="false"
-        android:overScrollMode="always"
-        />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/circular_progress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresher"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+
+                android:visibility="@{!gitRepoListViewModel.isErrorState  ?View.VISIBLE:View.GONE,default=gone}"
+                app:isRefreshing="@{gitRepoListViewModel.swipeLoaderState}">
+                <!--   app:gitRepoListAdapter="@{gitRepoList}"-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/git_list_recyler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="vertical"
+                    android:overScrollMode="always"
+                    app:gitRepoListAdapter="@{gitRepoListViewModel.gitRepoList}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="@{gitRepoListViewModel.initialLoader?View.VISIBLE:View.GONE,default=gone}" />
+        </FrameLayout>
+
         <ProgressBar
+            android:id="@+id/circular_progress"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{gitRepoListViewModel.loaderState ?View.VISIBLE:View.GONE,default=gone}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <include
+            android:id="@+id/error_screen"
+            layout="@layout/no_network_view"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:visibility="@{gitRepoListViewModel.initialLoader?View.VISIBLE:View.GONE,default=gone}"
-            />
-    </FrameLayout>
-    <ProgressBar
-        android:id="@+id/circular_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="@{gitRepoListViewModel.loaderState ?View.VISIBLE:View.GONE,default=gone}"/>
+            android:visibility="@{gitRepoListViewModel.isErrorState?View.VISIBLE:View.GONE,default=gone}"
+            app:onRetryClick="@{gitRepoListViewModel}" />
 
-    <include
-        android:id="@+id/error_screen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/no_network_view"
-        android:visibility="@{gitRepoListViewModel.isErrorState?View.VISIBLE:View.GONE,default=gone}"
-        app:onRetryClick="@{gitRepoListViewModel}"
-        />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
