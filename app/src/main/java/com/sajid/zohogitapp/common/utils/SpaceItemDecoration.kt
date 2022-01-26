@@ -6,7 +6,10 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-
+/**
+It is used by RecylerView to draw lines in inbetween items
+ and adds padding at Top and Bottom Views
+ */
 class SpaceItemDecoration(val mDivider:Drawable?) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(

@@ -9,7 +9,9 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.sajid.zohogitapp.common.utils.ConnectivityReceiver
-
+/**
+Common functions used in all activities will be present here
+ */
 abstract class BaseActivity : AppCompatActivity(),ConnectivityReceiver.ConnectivityReceiverListener{
     fun dismissKeyBoard() {
         try {

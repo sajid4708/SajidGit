@@ -17,7 +17,9 @@ import com.sajid.zohogitapp.R
 import com.sajid.zohogitapp.common.utils.SpaceItemDecoration
 import com.sajid.zohogitapp.datasources.model.GitRepo
 import com.sajid.zohogitapp.feature.gitrepos.view.GitRepoListAdapter
-
+/**
+Generic Recyler Adapter used to populate Items in recyler View
+ */
 @BindingAdapter("gitRepoListAdapter")
 fun bindForecastListAdapter(
     recyclerView: RecyclerView,
@@ -43,7 +45,10 @@ private fun getOrCreateAdapter(recyclerView: RecyclerView,gitRepos: GitRepo?): G
 }
 
 
-
+/**
+Gets Url has Input and Updates loads Image from
+ Url Using Glide Library and Updates Image View
+ */
 @BindingAdapter("imageUrl")
 fun bindImageUrlAndShowImage(imageView: ImageView,imageUrl:String?){
     if(!imageUrl.isNullOrEmpty()){
@@ -53,7 +58,7 @@ fun bindImageUrlAndShowImage(imageView: ImageView,imageUrl:String?){
         Glide
             .with(imageView.context)
             .asBitmap()
-            .override(48,48)
+            .override(24,24)
             .load(imageUrl)
             .fitCenter()
             .placeholder(R.drawable.ic_launcher_background)
@@ -66,6 +71,10 @@ fun bindImageUrlAndShowImage(imageView: ImageView,imageUrl:String?){
 
 }
 
+/**
+On Successfull data Refresh swipe layout hides
+ loader bar
+ */
 @BindingAdapter("isRefreshing")
 fun bindSwipeRefreshState(swipeRefreshLayout: SwipeRefreshLayout,isRefreshing:Boolean=false){
     if(!isRefreshing){

@@ -31,10 +31,5 @@ class LocalModule {
     @Provides
     fun provideGitDao(gitDatabase: GitDatabase)=gitDatabase.gitLocalDao()
 
-  @Provides
-  fun getWorker(@ApplicationContext app:Context):WorkManager
-  {
-      return WorkManager.getInstance(app)
-  }
 
 }

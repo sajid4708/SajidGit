@@ -2,7 +2,10 @@ package com.sajid.zohogitapp.common.utils
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+/**
+It is used by RecylerView to see if current item is last item and fetches new data
+ to show
+ */
 abstract class RecyclerEndScrollListner :RecyclerView.OnScrollListener(){
     abstract var canLoad:Boolean
 

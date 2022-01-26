@@ -28,7 +28,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+/**
+Fragment shows searched data as list
+ */
 @AndroidEntryPoint
 class GitSearchRepoFragment : Fragment() {
 
@@ -47,14 +49,24 @@ class GitSearchRepoFragment : Fragment() {
         binding = FragmentGitSearchRepoBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.gitRepoSearchViewModel = gitRepoSearchViewModel
-        dataSourceState = if (NetworkUtils.isNetworkAvailable(requireContext()))
-            DataSourceState.ONLINE_MODE
-        else DataSourceState.OFFLINE_MODE
+        initNetworkStatus()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        networkStatusObserver()
+        dataSourceApiStatusObserver()
+        searchQueryObserver()
+        addRecyclerViewScrollListner()
+
+
+    }
+
+    /**
+    Observes data Source data fetch status
+     */
+    private fun dataSourceApiStatusObserver(){
         lifecycleScope.launchWhenStarted {
             gitRepoSearchViewModel._gitRepoListFlow.collect {
                 when (it) {
@@ -78,12 +90,14 @@ class GitSearchRepoFragment : Fragment() {
                 }
             }
         }
+    }
+    /**
+    Observes Typed search Query and Makes Api Call
+     */
+    private fun searchQueryObserver(){
         gitViewModel._searchQuery.observe(viewLifecycleOwner, {
             gitRepoSearchViewModel.loadSearchData(DataFetchState.FETCH_FIRST_DATA, it,dataSourceState)
         })
-        addRecyclerViewScrollListner()
-
-
     }
 
     private fun addRecyclerViewScrollListner() {
@@ -97,6 +111,23 @@ class GitSearchRepoFragment : Fragment() {
                 )
 
             }
+        })
+    }
+    /**
+    updates current Network Status
+     */
+    private fun initNetworkStatus(){
+        dataSourceState = if (NetworkUtils.isNetworkAvailable(requireContext()))
+            DataSourceState.ONLINE_MODE
+        else DataSourceState.OFFLINE_MODE
+    }
+
+    /**
+    Observes current change in network connection
+     */
+    private fun networkStatusObserver() {
+        gitViewModel.isInternetConnected.observe(viewLifecycleOwner, {
+            dataSourceState = it
         })
     }
 

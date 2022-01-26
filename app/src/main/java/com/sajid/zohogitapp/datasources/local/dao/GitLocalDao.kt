@@ -3,6 +3,7 @@ package com.sajid.zohogitapp.datasources.local.dao
 import androidx.room.*
 import com.sajid.zohogitapp.datasources.model.GitItems
 
+
 @Dao
 interface GitLocalDao {
     @Query("SELECT * FROM git_items limit :limit offset :offset")

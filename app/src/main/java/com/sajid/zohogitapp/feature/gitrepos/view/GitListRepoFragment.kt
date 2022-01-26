@@ -22,10 +22,13 @@ import com.sajid.zohogitapp.feature.gitrepos.GitReposConfig.INITIAL_PAGE_NUMBER
 import com.sajid.zohogitapp.feature.gitrepos.GitReposConfig.PAGE_SIZE
 import com.sajid.zohogitapp.feature.gitrepos.viewmodel.GitViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-
+/**
+fragment holds list of public repositories
+ */
 @AndroidEntryPoint
-class GitListRepoFragment: Fragment() {
+class GitListRepoFragment : Fragment() {
     private val gitViewModel: GitViewModel by activityViewModels()
     private val gitRepoListViewModel: GitRepoListViewModel by viewModels()
     private lateinit var binding: FragmentGitListRepoBinding
@@ -39,29 +42,72 @@ class GitListRepoFragment: Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentGitListRepoBinding.inflate(inflater, container, false)
+        initUpdateNetworkStatus()
         binding.lifecycleOwner = viewLifecycleOwner
         binding.gitRepoListViewModel = gitRepoListViewModel
-        dataSourceState = if (NetworkUtils.isNetworkAvailable(requireContext()))
-            DataSourceState.ONLINE_MODE
-        else DataSourceState.OFFLINE_MODE
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        networkStatusObserver()
+        dataSourceResponseObserverStatus()
+        gitRepoListViewModel.loadGitRepoListData(DataFetchState.FETCH_FIRST_DATA, dataSourceState)
+        addSwipeListeners()
+        addRecyclerViewScrollListner()
+    }
+
+    /**
+     Swipe refresh Listner
+     */
+    private fun addSwipeListeners() {
+        binding.swipeRefresher.setOnRefreshListener {
+            gitRepoListViewModel.loadGitRepoListData(DataFetchState.REFRESH_DATA, dataSourceState)
+        }
+    }
+
+    private fun addRecyclerViewScrollListner() {
+        binding.gitListRecyler.addOnScrollListener(object : RecyclerEndScrollListner() {
+            override var canLoad: Boolean = canLoadNew
+            override fun loadMoreData() {
+                lifecycleScope.launch {
+                gitRepoListViewModel.loadGitRepoListData(DataFetchState.ADD_DATA, dataSourceState)
+                }
+            }
+        })
+    }
+
+    /**
+    checks current Network Status and Updates
+     */
+    private fun initUpdateNetworkStatus() {
+        dataSourceState = if (NetworkUtils.isNetworkAvailable(requireContext()))
+            DataSourceState.ONLINE_MODE
+        else DataSourceState.OFFLINE_MODE
+    }
+
+    /**
+    Observes current change in network connection
+     */
+    private fun networkStatusObserver() {
         gitViewModel.isInternetConnected.observe(viewLifecycleOwner, {
-            if(it==DataSourceState.OFFLINE_MODE){
+            if (it == DataSourceState.OFFLINE_MODE) {
                 lifecycleScope.launchWhenCreated {
                     gitRepoListViewModel.setErrorState(true)
                 }
             }
             dataSourceState = it
         })
+    }
+
+    /**
+    Observes data Source data fetch status
+     */
+    private fun dataSourceResponseObserverStatus() {
         lifecycleScope.launchWhenStarted {
             gitRepoListViewModel._gitRepoListFlow.collect {
                 when (it) {
                     is ApiState.Success<*> -> {
-
                         canLoadNew = true
                         gitViewModel.checkIfOfflineDataExist()
                     }
@@ -82,25 +128,6 @@ class GitListRepoFragment: Fragment() {
                 }
             }
         }
-        gitRepoListViewModel.loadGitRepoListData(DataFetchState.FETCH_FIRST_DATA, dataSourceState)
-        addSwipeListeners()
-        addRecyclerViewScrollListner()
-
-    }
-
-    private fun addSwipeListeners() {
-        binding.swipeRefresher.setOnRefreshListener {
-            gitRepoListViewModel.loadGitRepoListData(DataFetchState.REFRESH_DATA, dataSourceState)
-        }
-    }
-
-    private fun addRecyclerViewScrollListner() {
-        binding.gitListRecyler.addOnScrollListener(object : RecyclerEndScrollListner() {
-            override var canLoad: Boolean = canLoadNew
-            override fun loadMoreData() {
-                gitRepoListViewModel.loadGitRepoListData(DataFetchState.ADD_DATA, dataSourceState)
-            }
-        })
     }
 }
 

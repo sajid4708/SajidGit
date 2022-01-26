@@ -15,6 +15,7 @@ abstract class GitDatabase :RoomDatabase() {
     companion object {
         // Singleton prevents multiple instances of database opening at the
         // same time.
+        val dataBaseName="zoho-git"
         @Volatile
         private var INSTANCE: GitDatabase? = null
         private val lock = Any()
@@ -24,19 +25,18 @@ abstract class GitDatabase :RoomDatabase() {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
-                        GitDatabase::class.java, "zoho-git"
+                        GitDatabase::class.java, dataBaseName
                     ).addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
-                            Log.d("database-name", "Database created")
+                            Log.d(dataBaseName, "Database created")
                             super.onCreate(db)
                         }
 
                         override fun onOpen(db: SupportSQLiteDatabase) {
-                            Log.d("database-name", "Database opened")
+                            Log.d("zoho-git", "Database opened")
                             super.onOpen(db)
                         }
                     })
-                        .allowMainThreadQueries()
                         .build()
                 }
 

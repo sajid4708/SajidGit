@@ -43,4 +43,4 @@ data class Owner(
     var avatarUrl: String? = null,
     )
 
-data class ErrorResponse(@SerializedName("message") var errorMessage: String? = null,)
+

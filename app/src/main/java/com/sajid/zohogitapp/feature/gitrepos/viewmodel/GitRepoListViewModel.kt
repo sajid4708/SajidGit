@@ -23,24 +23,39 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GitRepoListViewModel @Inject constructor(private val gitDataSourceRepository: DataSourceRepository) : ViewModel(),OnNetworkRetryEvent {
-
+    /**
+    Show Network Error view if error state is true
+     */
     private val _isErrorState:MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
     val isErrorState:LiveData<Boolean>
     get() = _isErrorState
+
+
+    /**
+    Show bottom pagination loader based on this status
+     */
     private val _loadersState:MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
     val loaderState:LiveData<Boolean>
     get() = _loadersState
 
+
+    /**
+    Hides Swipe Loader Based on this status
+     */
     private val _swipeLoadersState:MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
     val swipeLoaderState:LiveData<Boolean>
         get() = _swipeLoadersState
 
+
+    /**
+    Shows Listed Data to Recycler View
+     */
     private val _gitRepoList:MutableLiveData<GitRepo> by lazy {
         MutableLiveData<GitRepo>()
     }
@@ -48,13 +63,25 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
     val gitRepoList: LiveData<GitRepo>
         get() = _gitRepoList
 
+
+    /**
+    Holds data from Data Sources and Updates Live Data
+     */
     private val gitRepoListFlow: MutableStateFlow<ApiState> =
         MutableStateFlow(ApiState.Empty)
 
     val _gitRepoListFlow :StateFlow<ApiState> = gitRepoListFlow
 
+
+    /**
+    Current page Number of Data List
+     */
     private var _pageNo=GitReposConfig.INITIAL_PAGE_NUMBER
 
+
+    /**
+    show Initial Data fetch Loader Based ont his status
+     */
     private val _initialLoader:MutableLiveData<Boolean> by lazy{
         MutableLiveData<Boolean>()
     }
@@ -62,6 +89,12 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
     val initialLoader:LiveData<Boolean>
     get() = _initialLoader
 
+
+
+    /**
+    Temporary List gets Data from Flow
+     and Updates Live Data List
+     */
     var tempList= mutableListOf<GitItems>()
 
 
@@ -90,86 +123,49 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
     private fun getRepoListData(pageNo:Int,pageSize:Int,dataSourceState: DataSourceState)=viewModelScope.launch {
         _swipeLoadersState.value=true
         gitRepoListFlow.value = ApiState.Loading
-        if(dataSourceState==DataSourceState.ONLINE_MODE) {
-            gitDataSourceRepository.getRepoListFromRemote(pageNo, pageSize)
-                .catch { e ->
-                    gitRepoListFlow.value = ApiState.Failure(e)
-                    _swipeLoadersState.value = false
-                    _initialLoader.value=false
+        gitDataSourceRepository.getGitRepoListData(pageNo,pageSize,dataSourceState)
+            .catch { e ->
+                gitRepoListFlow.value = ApiState.Failure(e)
+                _swipeLoadersState.value = false
+                _initialLoader.value=false
+            }
+            .collect { data ->
+                gitRepoListFlow.value = ApiState.Success(data)
+                tempList.clear()
+                tempList.addAll(data.items)
+                _gitRepoList.value =data.apply {
+                    items=tempList.toSet().toMutableList()
                 }
-                .collect { data ->
-                    gitRepoListFlow.value = ApiState.Success(data)
-                    tempList.clear()
-                    tempList.addAll(data.items)
-                    _gitRepoList.value =data.apply {
-                        items=tempList.toSet().toMutableList()
-                    }
-                    _swipeLoadersState.value = false
-                    _initialLoader.value=false
-                    _isErrorState.value=false
-
-                }
-        }
-        else{
-            gitDataSourceRepository.getRepoListFromLocal(pageNo, pageSize)
-                .catch { e ->
-                    gitRepoListFlow.value = ApiState.Failure(e)
-                    _swipeLoadersState.value = false
-                    _initialLoader.value=false
-                }
-                .collect { data ->
-                    gitRepoListFlow.value = ApiState.Success(data)
-                    tempList.clear()
-                    tempList.addAll(data.items)
-                    _gitRepoList.value =data.apply {
-                        items=tempList.toSet().toMutableList()
-                    }
-                    _swipeLoadersState.value = false
-                    _initialLoader.value=false
+                _swipeLoadersState.value = false
+                _initialLoader.value=false
+                if(dataSourceState==DataSourceState.ONLINE_MODE){
+                _isErrorState.value=false
                 }
 
-    }
+            }
+
     }
 
 
     private fun  addRepoListData(pageNo:Int,pageSize:Int,dataSourceState: DataSourceState)=viewModelScope.launch {
         gitRepoListFlow.value = ApiState.Loading
         _loadersState.value=true
-        if(dataSourceState==DataSourceState.ONLINE_MODE){
-            gitDataSourceRepository.getRepoListFromRemote(pageNo,pageSize)
-                .catch {e->
-                    gitRepoListFlow.value = ApiState.Failure(e)
-                    _loadersState.value=false
+        gitDataSourceRepository.getGitRepoListData(pageNo,pageSize,dataSourceState)
+            .catch {e->
+                gitRepoListFlow.value = ApiState.Failure(e)
+                _loadersState.value=false
+            }
+            .collect {data->
+                tempList.addAll(data.items)
+                _gitRepoList.value =data.apply {
+                    items=tempList.toSet().toMutableList()
                 }
-                .collect {data->
-                    tempList.addAll(data.items)
-                    _gitRepoList.value =data.apply {
-                        items=tempList.toSet().toMutableList()
-                    }
-                    _loadersState.value=false
-                    gitRepoListFlow.value=ApiState.Success(data)
+                _loadersState.value=false
+                gitRepoListFlow.value=ApiState.Success(data)
 
 
 
-                }
-        }
-        else{
-            gitDataSourceRepository.getRepoListFromLocal(pageNo,pageSize)
-                .catch {e->
-                    gitRepoListFlow.value = ApiState.Failure(e)
-                    _loadersState.value=false
-                }
-                .collect {data->
-                    tempList.addAll(data.items)
-                    _gitRepoList.value =data.apply {
-                        items=tempList.toSet().toMutableList()
-                    }
-                    _loadersState.value=false
-                    gitRepoListFlow.value=ApiState.Success(data)
-
-                }
-        }
-
+            }
     }
 
 suspend fun setErrorState(isError:Boolean){

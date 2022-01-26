@@ -2,7 +2,9 @@ package com.sajid.zohogitapp.common.utils
 
 import androidx.recyclerview.widget.DiffUtil
 import com.sajid.zohogitapp.datasources.model.GitItems
-
+/**
+It is used by RecylerView to Efficently create Views in Recycler View
+ */
 class GitHubRepoDiffUtil(private val oldList:List<GitItems>, private val newList:List<GitItems>) : DiffUtil.Callback () {
 
 

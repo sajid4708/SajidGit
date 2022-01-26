@@ -5,7 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 
+
+/**
+This class is used to receive Any change in Network Connection and passess it to activity
+ */
 class ConnectivityReceiver : BroadcastReceiver() {
+    /**
+    This is called when connection changed
+     */
     override fun onReceive(context: Context?, intent: Intent?) {
 
         if (connectivityReceiverListener != null) {
@@ -19,7 +26,9 @@ class ConnectivityReceiver : BroadcastReceiver() {
         val networkInfo = connMgr.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnectedOrConnecting
     }
-
+    /**
+    This Method is Implemented By activity to receive change in connection
+     */
     interface ConnectivityReceiverListener {
         fun onNetworkConnectionChanged(isConnected: Boolean)
     }

@@ -23,12 +23,20 @@ import javax.inject.Inject
 @HiltViewModel
 class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceRepository: DataSourceRepository) :
     ViewModel(){
+
+    /**
+    Show bottom pagination loader based on this status
+     */
     private val _loadersState: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
     }
     val loaderState: LiveData<Boolean>
         get() = _loadersState
 
+
+    /**
+    Shows Listed Data to Recycler View
+     */
     private val _gitRepoSearchList: MutableLiveData<GitRepo> by lazy {
         MutableLiveData<GitRepo>()
     }
@@ -36,14 +44,28 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
     val gitRepoSearchList: LiveData<GitRepo>
         get() = _gitRepoSearchList
 
+
+    /**
+    Holds data from Data Sources and Updates Live Data
+     */
     private val gitRepoListFlow: MutableStateFlow<ApiState> =
         MutableStateFlow(ApiState.Empty)
 
     val _gitRepoListFlow: StateFlow<ApiState> = gitRepoListFlow
 
+
+    /**
+    Current page Number of Data List
+     */
     private var pageNo = GitReposConfig.INITIAL_PAGE_NUMBER
 
+
+    /**
+    Temporary List gets Data from Flow
+    and Updates Live Data List
+     */
     var tempList= mutableListOf<GitItems>()
+
 
     fun loadSearchData(
         dataFetchState: DataFetchState,
@@ -53,11 +75,11 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
         when (dataFetchState) {
             DataFetchState.FETCH_FIRST_DATA -> {
                 pageNo = 1
-                getRepoSearchListData(searchQuery, dataSourceState = dataSourceState)
+                getRepoSearchData(searchQuery, dataSourceState = dataSourceState)
             }
             DataFetchState.ADD_DATA -> {
                 pageNo++
-                getRepoSearchListData(
+                getRepoSearchData(
                     searchQuery,
                     isAddData = true,
                     dataSourceState = dataSourceState
@@ -70,7 +92,7 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
         }
     }
 
-    private fun getRepoSearchListData(
+    private fun getRepoSearchData(
         searchQuery: String? = "",
         isAddData: Boolean = false,
         dataSourceState: DataSourceState
@@ -78,64 +100,34 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
         if (!searchQuery.isNullOrEmpty()) {
             gitRepoListFlow.value = ApiState.Loading
             _loadersState.value = true
-            if (dataSourceState == DataSourceState.ONLINE_MODE) {
-                gitDataSourceRepository.getRepoSearchedListFromRemote(
-                    pageNo,
-                    GitReposConfig.PAGE_SIZE,
-                    searchQuery
-                )
-                    .catch { e ->
-                        gitRepoListFlow.value = ApiState.Failure(e)
-                        _loadersState.value = false
+            gitDataSourceRepository.getGitRepoSearchListData(
+                pageNo, GitReposConfig.PAGE_SIZE, searchQuery, dataSourceState
+            )
+                .catch { e->
+                    gitRepoListFlow.value = ApiState.Failure(e)
+                    _loadersState.value = false
+                    if(!isAddData) {
+                        _gitRepoSearchList.value = null
                     }
-                    .collect { data ->
-                        gitRepoListFlow.value = ApiState.Success(data)
-                        _loadersState.value = false
-                        if (isAddData) {
-                            if(!data.items.isNullOrEmpty()){
-                                tempList.addAll(data.items)
-                                _gitRepoSearchList.value =data.apply {
-                                    items=tempList.toSet().toMutableList()
-                                }
-                            }
-                        } else {
-                            tempList.clear()
+                }
+                .collect {data->
+                    gitRepoListFlow.value = ApiState.Success(data)
+                    _loadersState.value = false
+                    if (isAddData) {
+                        if(!data.items.isNullOrEmpty()){
                             tempList.addAll(data.items)
                             _gitRepoSearchList.value =data.apply {
                                 items=tempList.toSet().toMutableList()
                             }
                         }
-                    }
-            } else {
-                gitDataSourceRepository.getRepoSearchedListFromLocal(
-                    pageNo,
-                    GitReposConfig.PAGE_SIZE,
-                    searchQuery
-                )
-                    .catch { e ->
-                        gitRepoListFlow.value = ApiState.Failure(e)
-                        _loadersState.value = false
-                    }
-                    .collect { data ->
-                        gitRepoListFlow.value = ApiState.Success(data)
-                        _loadersState.value = false
-                        if (isAddData) {
-                            if(!data.items.isNullOrEmpty()){
-                                tempList.addAll(data.items)
-                                _gitRepoSearchList.value =data.apply {
-                                    items=tempList.toSet().toMutableList()
-                                }
-                            }
-                        } else {
-                            tempList.clear()
-                            tempList.addAll(data.items)
-                            _gitRepoSearchList.value =data.apply {
-                                items=tempList.toSet().toMutableList()
-                            }
+                    } else {
+                        tempList.clear()
+                        tempList.addAll(data.items)
+                        _gitRepoSearchList.value =data.apply {
+                            items=tempList.toSet().toMutableList()
                         }
                     }
-            }
-
+                }
         }
         else{
             _gitRepoSearchList.value=null
@@ -143,4 +135,4 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
     }
 
 
-}
+    }
