@@ -31,7 +31,7 @@ class GitListRepoFragment : Fragment() {
     private val gitViewModel: GitViewModel by activityViewModels()
     private val gitRepoListViewModel: GitRepoListViewModel by viewModels()
     private lateinit var binding: FragmentGitListRepoBinding
-    private var canLoadNew = true
+    private var canLoadNew = false
     private lateinit var dataSourceState: DataSourceState
 
 
