@@ -8,7 +8,11 @@ import com.google.gson.annotations.SerializedName
 
 
 data class GitRepo(
-    @SerializedName("items") var items: MutableList<GitItems> = mutableListOf()
+    @SerializedName("items") var items: MutableList<GitItems> = mutableListOf(),
+    @SerializedName("message")
+    var message:String="",
+    var isError:Boolean=false,
+    var errorCode:Int=-1
 
 )
 @Entity(tableName = "git_items")
@@ -30,7 +34,7 @@ data class GitItems(
     val stargazersCount: Int = 0,
     @ColumnInfo
     @SerializedName("language")
-    val language: String? = null,
+    val language: String? = null
     )
 
 

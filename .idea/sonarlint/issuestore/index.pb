@@ -1,14 +1,8 @@
 
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
-u
-Eapp/src/main/java/com/sajid/zohogitapp/datasources/remote/ApiState.kt,c\9\c967421a5c70855e8b1fa6ccaa2a6abeb2db550d
-
-Oapp/src/main/java/com/sajid/zohogitapp/datasources/remote/service/GitService.kt,3\8\387cf6cbcbbe7475d4885532c01d7ea9059d17e4
 |
 Lapp/src/main/java/com/sajid/zohogitapp/datasources/remote/di/RemoteModule.kt,c\b\cbc2c470317aad8ec910aff0dd748816f811cd6f
-
-]app/src/main/java/com/sajid/zohogitapp/datasources/remote/service/GitServiceImplementation.kt,0\4\042e701f3d64f6fa1e4a4fc5a6defb35f15bff3c
 x
 Happ/src/androidTest/java/com/sajid/zohogitapp/ExampleInstrumentedTest.kt,6\5\656bb6452883a95d2cac553530d3b977064f2bd0
 q

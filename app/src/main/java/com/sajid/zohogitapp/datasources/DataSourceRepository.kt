@@ -48,7 +48,12 @@ class DataSourceRepository @Inject constructor(
 
     private fun getRepoListFromRemote(pageNo: Int, pageSize: Int) = flow {
         val data = gitServiceImplementation.getRepoList(pageNo, pageSize)
-        emit(data)
+        if(data.isError){
+            error(data.message)
+        }
+        else{
+            emit(data)
+        }
         gitLocalDao.insertAll(data.items)
     }.flowOn(Dispatchers.IO)
 
@@ -65,7 +70,12 @@ class DataSourceRepository @Inject constructor(
      fun getRepoSearchedListFromRemote(pageNo: Int, pageSize: Int, searchQuery: String) =
         flow {
             val data = gitServiceImplementation.getRepoSearchList(pageNo, pageSize, searchQuery)
-            emit(data)
+            if(data.isError){
+                error(data.message)
+            }
+            else{
+                emit(data)
+            }
             gitLocalDao.insertAll(data.items)
         }.flowOn(Dispatchers.IO)
 
