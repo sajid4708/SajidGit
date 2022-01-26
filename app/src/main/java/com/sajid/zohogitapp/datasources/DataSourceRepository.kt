@@ -26,12 +26,23 @@ class DataSourceRepository @Inject constructor(private val gitServiceImplementat
 
     fun getRepoListFromLocal(pageNo:Int,pageSize:Int)=flow{
         val data=GitRepo(gitLocalDao.getGitLocalList(pageNo-1,pageSize))
-        emit(data)
+        if(data.items.isNullOrEmpty()){
+            error("No data available in local")
+        }
+        else{
+            emit(data)
+        }
+
     }.flowOn(Dispatchers.IO)
 
     fun getRepoSearchedListFromLocal(pageNo: Int,pageSize: Int,searchQuery:String)=flow{
-        val data=GitRepo(gitLocalDao.getGitLocalListWithSearch(pageNo,pageSize,searchQuery))
-        emit(data)
+        val data=GitRepo(gitLocalDao.getGitLocalListWithSearch(pageNo-1,pageSize,searchQuery))
+        if(data.items.isNullOrEmpty()){
+            error("No data available in local")
+        }
+        else{
+            emit(data)
+        }
     }.flowOn(Dispatchers.IO)
 
     fun checkIfOfflineDataAvailable()= flow {

@@ -9,13 +9,13 @@ abstract class RecyclerEndScrollListner :RecyclerView.OnScrollListener(){
     abstract fun loadMoreData()
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
+        //Not needed to Implement
     }
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
-
+        if(canLoad){
         if ((recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= (recyclerView.layoutManager as LinearLayoutManager).itemCount - 1 ){
-            if(canLoad){
             loadMoreData()
         }
         }

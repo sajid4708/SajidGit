@@ -8,6 +8,7 @@ import com.sajid.zohogitapp.common.utils.DataFetchState
 import com.sajid.zohogitapp.common.utils.DataSourceState
 import com.sajid.zohogitapp.common.utils.OnNetworkRetryEvent
 import com.sajid.zohogitapp.datasources.DataSourceRepository
+import com.sajid.zohogitapp.datasources.model.GitItems
 import com.sajid.zohogitapp.datasources.model.GitRepo
 import com.sajid.zohogitapp.datasources.remote.ApiState
 import com.sajid.zohogitapp.feature.gitrepos.GitReposConfig
@@ -41,6 +42,8 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
     val _gitRepoListFlow: StateFlow<ApiState> = gitRepoListFlow
 
     private var pageNo = GitReposConfig.INITIAL_PAGE_NUMBER
+
+    var tempList= mutableListOf<GitItems>()
 
     fun loadSearchData(
         dataFetchState: DataFetchState,
@@ -89,13 +92,18 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
                         gitRepoListFlow.value = ApiState.Success(data)
                         _loadersState.value = false
                         if (isAddData) {
-                            _gitRepoSearchList.value = _gitRepoSearchList.value.apply {
-                                if (this != null) {
-                                    items.addAll(data.items)
+                            if(!data.items.isNullOrEmpty()){
+                                tempList.addAll(data.items)
+                                _gitRepoSearchList.value =data.apply {
+                                    items=tempList.toSet().toMutableList()
                                 }
                             }
                         } else {
-                            _gitRepoSearchList.value = data
+                            tempList.clear()
+                            tempList.addAll(data.items)
+                            _gitRepoSearchList.value =data.apply {
+                                items=tempList.toSet().toMutableList()
+                            }
                         }
                     }
             } else {
@@ -112,13 +120,18 @@ class GitRepoSearchViewModel @Inject constructor(private val gitDataSourceReposi
                         gitRepoListFlow.value = ApiState.Success(data)
                         _loadersState.value = false
                         if (isAddData) {
-                            _gitRepoSearchList.value = _gitRepoSearchList.value.apply {
-                                if (this != null) {
-                                    items.addAll(data.items)
+                            if(!data.items.isNullOrEmpty()){
+                                tempList.addAll(data.items)
+                                _gitRepoSearchList.value =data.apply {
+                                    items=tempList.toSet().toMutableList()
                                 }
                             }
                         } else {
-                            _gitRepoSearchList.value = data
+                            tempList.clear()
+                            tempList.addAll(data.items)
+                            _gitRepoSearchList.value =data.apply {
+                                items=tempList.toSet().toMutableList()
+                            }
                         }
                     }
             }

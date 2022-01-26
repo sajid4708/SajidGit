@@ -61,6 +61,7 @@ class GitListRepoFragment: Fragment() {
             gitRepoListViewModel._gitRepoListFlow.collect {
                 when (it) {
                     is ApiState.Success<*> -> {
+
                         canLoadNew = true
                         gitViewModel.checkIfOfflineDataExist()
                     }

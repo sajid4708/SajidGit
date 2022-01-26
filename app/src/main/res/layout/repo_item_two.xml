@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.view.View"/>
         <variable
             name="gitRepoItem"
             type="com.sajid.zohogitapp.datasources.model.GitItems" />
@@ -66,6 +67,7 @@
         app:imgSrc="@{langImgSrc}"
         android:layout_alignParentStart="true"
         app:textToShow="@{String.valueOf(gitRepoItem.language)}"
+        android:visibility="@{gitRepoItem.language==null?View.GONE:View.VISIBLE,default=gone}"
         />
     <include
         android:layout_marginVertical="@dimen/container_vertical_margin"
@@ -76,7 +78,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:imgSrc="@{starImgSrc}"
         android:layout_alignParentEnd="true"
-        app:textToShow="@{String.valueOf(gitRepoItem.stargazersCount)}"/>
+        app:textToShow="@{String.valueOf(gitRepoItem.stargazersCount)}"
+       />
 </RelativeLayout>
 </LinearLayout>
 </layout>

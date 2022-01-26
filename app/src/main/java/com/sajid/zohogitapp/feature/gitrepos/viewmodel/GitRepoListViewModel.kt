@@ -9,6 +9,7 @@ import com.sajid.zohogitapp.common.utils.DataFetchState
 import com.sajid.zohogitapp.common.utils.DataSourceState
 import com.sajid.zohogitapp.common.utils.OnNetworkRetryEvent
 import com.sajid.zohogitapp.datasources.DataSourceRepository
+import com.sajid.zohogitapp.datasources.model.GitItems
 import com.sajid.zohogitapp.datasources.model.GitRepo
 import com.sajid.zohogitapp.datasources.remote.ApiState
 import com.sajid.zohogitapp.feature.gitrepos.GitReposConfig
@@ -61,6 +62,7 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
     val initialLoader:LiveData<Boolean>
     get() = _initialLoader
 
+    var tempList= mutableListOf<GitItems>()
 
 
     fun loadGitRepoListData(dataFetchState: DataFetchState,dataSourceState: DataSourceState){
@@ -97,7 +99,11 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
                 }
                 .collect { data ->
                     gitRepoListFlow.value = ApiState.Success(data)
-                    _gitRepoList.value = data
+                    tempList.clear()
+                    tempList.addAll(data.items)
+                    _gitRepoList.value =data.apply {
+                        items=tempList.toSet().toMutableList()
+                    }
                     _swipeLoadersState.value = false
                     _initialLoader.value=false
                     _isErrorState.value=false
@@ -113,7 +119,11 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
                 }
                 .collect { data ->
                     gitRepoListFlow.value = ApiState.Success(data)
-                    _gitRepoList.value = data
+                    tempList.clear()
+                    tempList.addAll(data.items)
+                    _gitRepoList.value =data.apply {
+                        items=tempList.toSet().toMutableList()
+                    }
                     _swipeLoadersState.value = false
                     _initialLoader.value=false
                 }
@@ -132,14 +142,14 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
                     _loadersState.value=false
                 }
                 .collect {data->
-
+                    tempList.addAll(data.items)
+                    _gitRepoList.value =data.apply {
+                        items=tempList.toSet().toMutableList()
+                    }
                     _loadersState.value=false
                     gitRepoListFlow.value=ApiState.Success(data)
-                    _gitRepoList.value=_gitRepoList.value.apply {
-                        if(this!=null){
-                            items.addAll(data.items)
-                        }
-                    }
+
+
 
                 }
         }
@@ -150,13 +160,12 @@ class GitRepoListViewModel @Inject constructor(private val gitDataSourceReposito
                     _loadersState.value=false
                 }
                 .collect {data->
+                    tempList.addAll(data.items)
+                    _gitRepoList.value =data.apply {
+                        items=tempList.toSet().toMutableList()
+                    }
                     _loadersState.value=false
                     gitRepoListFlow.value=ApiState.Success(data)
-                    _gitRepoList.value=_gitRepoList.value.apply {
-                        if(this!=null){
-                            items.addAll(data.items)
-                        }
-                    }
 
                 }
         }

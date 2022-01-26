@@ -1,10 +1,6 @@
 
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
-d
-4app/src/main/java/com/sajid/zohogitapp/common/App.kt,1\7\17ced1f7b529d502adf39ab4e1aac0389026e1b4
-k
-;app/src/main/java/com/sajid/zohogitapp/common/Extensions.kt,d\6\d6f7816ac9ede0e68b456220e67556dc3efd9da9
 u
 Eapp/src/main/java/com/sajid/zohogitapp/datasources/remote/ApiState.kt,c\9\c967421a5c70855e8b1fa6ccaa2a6abeb2db550d
 
@@ -19,9 +15,23 @@ x
 Happ/src/androidTest/java/com/sajid/zohogitapp/ExampleInstrumentedTest.kt,6\5\656bb6452883a95d2cac553530d3b977064f2bd0
 q
 Aapp/src/androidTest/java/com/sajid/zohogitapp/dbtest/GitDbTest.kt,8\5\85609f628b511e48693e081ba14e0e82686e69c4
-t
-Dapp/src/main/java/com/sajid/zohogitapp/common/utils/PojoJsonutils.kt,6\d\6dff5e91a1973ef23f4a8de2e4c20a7b10db6218
 @
 app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
-
-Oapp/src/main/java/com/sajid/zohogitapp/common/utils/RecyclerEndScrollListner.kt,5\c\5c94feb56420018aeda11c5cc5c276ed6ca90244
+z
+Japp/src/main/java/com/sajid/zohogitapp/datasources/local/di/LocalModule.kt,6\8\68e7f1bc5cff3bac36e12825fe1645b4462a6a19
+‹
+[app/src/main/java/com/sajid/zohogitapp/datasources/model/GitRepoRequestAndResponseModels.kt,b\9\b9f31fe54f313dbaa136d7651c56fd4b0fb7510b
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+…
+Uapp/src/main/java/com/sajid/zohogitapp/feature/gitrepos/view/GitSearchRepoFragment.kt,0\2\02cb9037fab9d90a8f0f583c46313b1ef0957527
+‚
+Rapp/src/main/java/com/sajid/zohogitapp/feature/gitrepos/view/GitRepoListAdapter.kt,4\c\4ca0a6b16850877fa0db162dc4cb26bd9f89a236
+u
+Eapp/src/main/java/com/sajid/zohogitapp/common/utils/DataFetchState.kt,8\c\8c4a193759634aedb6ec02a1c4cec3db2270cc9f
+v
+Fapp/src/main/java/com/sajid/zohogitapp/common/utils/DataSourceState.kt,3\4\345eca0ad8ef0a77e6b274f75317e057c394cd93
+y
+Iapp/src/main/java/com/sajid/zohogitapp/common/utils/GitHubRepoDiffUtil.kt,9\4\9468bc8f28823ec92807547dc434e28decc93b4a
+s
+Capp/src/main/java/com/sajid/zohogitapp/common/utils/NetworkUtils.kt,5\0\50dac6d2cc424d493e0af9012d96ffd2ee61cd8c
